@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"></meta>
+        <meta name="viewport" content="width=device-width, pinitial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+        <style>
+            #back{
+    font-size:30px;
+    width:10px;
+}
+
+.main-body{
+    display:none;
+    background-color:rgba(31,32,33,.8);
+}
+#message-body{
+    overflow:scroll;
+}
+#message-body div{
+    position:relative; 
+    text-indent:2px;
+    width:50%;
+    border:1px solid black; 
+    border-left-width:5px;
+    border-left-style:solid;
+    border-left-color:orange;
+    border-radius:8px;
+    margin-top:5px;
+    margin-left:2px;
+    color:black; 
+    background-color:white;
+    box-shadow:2px 3px 5px black;
+    word-wrap:wrap;
+}
+#userForm{
+   position:absolute; 
+   border:1px solid black;
+   top:50%;
+   left:20%;
+}
+#userForm button{
+    position:relative ;
+    left:40%;
+}
+#greet{
+  font-size:20px;
+  background-color:white; 
+  color:green;
+  box-shadow:2px 3px 5px black; 
+  font-weight:bold;
+  text-transform:capitalize ;
+}
+
+#head{
+    font-size:30px;
+    text-align:center;
+    width:100vw;
+    color:violet;
+    background-color:black;
+    font-weight:bold;
+}
+.send-pannel{
+    margin-top:80%;
+}
+
+
+        </style>
+        <title>ChatRoom</title>
+    </head>
+    <body> 
+    
+    
+    <div id="head">CHAT WEBSITE</div>
+   <div id="userForm">  
+ <input type="text"id="username" class="form-control" placeholder="Enter your name" value="Demo"required ><br />
+ <button onclick="getUserName()"class="btn btn-success">SET</button> </div>
+ 
+ 
+      <!-- message body -->   
+     
+    <div class="main-body">
+       <div class="row">
+<div class="col-2"><button onclick="back()">🔙</button></div>
+<div id="greet"class="col-8"></div>
+
+   </div> 
+      
+       
+    <div id="message-body"></div>
+    
+    <div class="row container send-pannel">
+      <input class="col-10 form-control" id="message"type="text" placeholder="Enter Message..."required="true">
+      <button class="col-2 btn btn-outline-info"id="send">Send</button>
+    </div>
+    
+</div> 
+    
+     <!--Firebase Libraries--> 
+     
+     
+<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+<!--<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-auth.js"></script>-->
+<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script> 
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script>
+    // Your web app's Firebase configuration
+ var firebaseConfig = {
+    apiKey: "AIzaSyAqrFcmN5LvTqQhYEauioDbvXBrWYEpQWA",
+    authDomain: "powerful-rhino-309504.firebaseapp.com",
+    projectId: "powerful-rhino-309504",
+    storageBucket: "powerful-rhino-309504.appspot.com",
+    messagingSenderId: "488100543452",
+    appId: "1:488100543452:web:850de4e8e89b72885b2d19"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+</script>
+<script>
+
+function getUserName(){ 
+let username=document.getElementById("username").value;
+if(username!="")
+ {   $("#userForm").toggle()
+     $(".main-body").toggle()
+     getMessage(); 
+     User(username);
+ }
+ else 
+  { let x=$("<div></div>").attr("class","alert")
+    x.html("Please Enter user Name ") 
+    $("body").prepend(x)
+    setTimeout(function(){
+      $(".alert").remove() ;
+    },2000)
+  
+  }
+}
+function back(){
+$("#message-body").empty();
+$(".main-body").toggle();
+$("#userForm").toggle(); 
+
+  
+}
+ 
+
+
+/**************sending message **********/ 
+
+var message; 
+var userName; 
+function User(e){ 
+    userName=e; 
+    $("#greet").text("welcome "+e); 
+}
+function ready(){ 
+message=document.getElementById("message").value;} 
+
+document.getElementById("send").onclick=function(){
+  ready(); 
+ 
+  if(message!=""){ 
+firebase.database().ref("user/"+userName).set({ 
+  msg:message
+  },()=>{
+     let x=$("<div></div>")
+              .html(message); 
+        x.css("left","50%"); 
+        x.css("color","green"); 
+        x.css("borderLeftColor","violet")
+        $("#message-body").append(x); 
+  }); 
+  }
+ 
+  else 
+     alert("Enter massage first!")
+}
+
+
+/**************recieving data************/ 
+
+/*{document.getElementById("get").onclick=function(){
+ready();
+if(userid!="")
+firebase.database().ref("user/"+userid).on("value",(snapshot)=>{
+    console.log(snapshot.val().name)
+});
+else 
+   alert("Enter userid !")
+} 
+}*/ 
+
+
+   /*********Displaying data*************/  
+
+function getMessage(){
+firebase.database().ref("/user").once("value",gotdata,error); 
+}  
+
+function gotdata(data){
+  var userArray=Object.keys(data.val()); 
+    
+    //console.log((data.val().Deepesh.msg))
+  
+  for(let i=0;i<userArray.length;++i)
+    {
+        var k=userArray[i]; 
+        var x=$("<div></div>")
+              .html(k+":"+data.val()[k].msg); 
+        $("#message-body").append(x); 
+    }
+}
+function error(err)
+{
+    console.log("error!"+err)
+} 
+
+</script>
+    </body>
+</html>
