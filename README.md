@@ -1,2 +1,2 @@
-# chat-website
-This my chatting website 
+# Chat-room using firebase 
+This is a simple chat room project for beginner  
