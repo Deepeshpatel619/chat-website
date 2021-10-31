@@ -104,19 +104,25 @@
 <!--<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-auth.js"></script>-->
 <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script> 
 <!-- The core Firebase JS SDK is always required and must be listed first -->
-<script>
-    // Your web app's Firebase configuration
- var firebaseConfig = {
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
     apiKey: "AIzaSyAqrFcmN5LvTqQhYEauioDbvXBrWYEpQWA",
     authDomain: "powerful-rhino-309504.firebaseapp.com",
+    databaseURL: "https://powerful-rhino-309504-default-rtdb.firebaseio.com",
     projectId: "powerful-rhino-309504",
     storageBucket: "powerful-rhino-309504.appspot.com",
     messagingSenderId: "488100543452",
     appId: "1:488100543452:web:850de4e8e89b72885b2d19"
   };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
 
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
 </script>
 <script>
 
